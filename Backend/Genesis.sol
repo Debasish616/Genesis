@@ -1,14 +1,7 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
-
-import "@openzeppelin/contracts/utils/Strings.sol";
-import "@openzeppelin/contracts/utils/Arrays.sol";
-import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+pragma solidity  ^0.8.0;
 
 contract PasswordManager {
-    using Strings for uint256;
-    using Arrays for bytes;
-
     struct Credentials {
         string website;
         string username;
