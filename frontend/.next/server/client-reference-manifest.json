@@ -72,33 +72,9 @@
         "async": false
       }
     },
-    "(app-client)/./src/web3Connection/Web3ConnectionContext.tsx": {
+    "(app-client)/./src/components/Sections/ShowData/UserAllData.tsx": {
       "*": {
-        "id": "(sc_client)/./src/web3Connection/Web3ConnectionContext.tsx",
-        "name": "*",
-        "chunks": [],
-        "async": false
-      }
-    },
-    "(app-client)/./src/components/provider/AnimationDivProvider.tsx": {
-      "*": {
-        "id": "(sc_client)/./src/components/provider/AnimationDivProvider.tsx",
-        "name": "*",
-        "chunks": [],
-        "async": false
-      }
-    },
-    "(app-client)/./src/components/provider/ThirdWebProvider.tsx": {
-      "*": {
-        "id": "(sc_client)/./src/components/provider/ThirdWebProvider.tsx",
-        "name": "*",
-        "chunks": [],
-        "async": false
-      }
-    },
-    "(app-client)/./src/components/Sections/Nav/AppSidebar.tsx": {
-      "*": {
-        "id": "(sc_client)/./src/components/Sections/Nav/AppSidebar.tsx",
+        "id": "(sc_client)/./src/components/Sections/ShowData/UserAllData.tsx",
         "name": "*",
         "chunks": [],
         "async": false
@@ -112,9 +88,33 @@
         "async": false
       }
     },
-    "(app-client)/./src/components/Sections/ShowData/UserAllData.tsx": {
+    "(app-client)/./src/web3Connection/Web3ConnectionContext.tsx": {
       "*": {
-        "id": "(sc_client)/./src/components/Sections/ShowData/UserAllData.tsx",
+        "id": "(sc_client)/./src/web3Connection/Web3ConnectionContext.tsx",
+        "name": "*",
+        "chunks": [],
+        "async": false
+      }
+    },
+    "(app-client)/./src/components/provider/ThirdWebProvider.tsx": {
+      "*": {
+        "id": "(sc_client)/./src/components/provider/ThirdWebProvider.tsx",
+        "name": "*",
+        "chunks": [],
+        "async": false
+      }
+    },
+    "(app-client)/./src/components/provider/AnimationDivProvider.tsx": {
+      "*": {
+        "id": "(sc_client)/./src/components/provider/AnimationDivProvider.tsx",
+        "name": "*",
+        "chunks": [],
+        "async": false
+      }
+    },
+    "(app-client)/./src/components/Sections/Nav/AppSidebar.tsx": {
+      "*": {
+        "id": "(sc_client)/./src/components/Sections/Nav/AppSidebar.tsx",
         "name": "*",
         "chunks": [],
         "async": false
@@ -251,16 +251,24 @@
       ],
       "async": false
     },
-    "C:\\Users\\aramb.ARAMBH\\OneDrive\\Documents\\GitHub\\Genesis\\frontend\\src\\web3Connection\\Web3ConnectionContext.tsx": {
-      "id": "(app-client)/./src/web3Connection/Web3ConnectionContext.tsx",
+    "C:\\Users\\aramb.ARAMBH\\OneDrive\\Documents\\GitHub\\Genesis\\frontend\\src\\components\\Sections\\ShowData\\UserAllData.tsx": {
+      "id": "(app-client)/./src/components/Sections/ShowData/UserAllData.tsx",
       "name": "*",
       "chunks": [
-        "app/app/layout:static/chunks/app/app/layout.js"
+        "app/app/page:static/chunks/app/app/page.js"
       ],
       "async": false
     },
-    "C:\\Users\\aramb.ARAMBH\\OneDrive\\Documents\\GitHub\\Genesis\\frontend\\src\\components\\provider\\AnimationDivProvider.tsx": {
-      "id": "(app-client)/./src/components/provider/AnimationDivProvider.tsx",
+    "C:\\Users\\aramb.ARAMBH\\OneDrive\\Documents\\GitHub\\Genesis\\frontend\\src\\components\\Sections\\UploadData\\UploadData.tsx": {
+      "id": "(app-client)/./src/components/Sections/UploadData/UploadData.tsx",
+      "name": "*",
+      "chunks": [
+        "app/app/page:static/chunks/app/app/page.js"
+      ],
+      "async": false
+    },
+    "C:\\Users\\aramb.ARAMBH\\OneDrive\\Documents\\GitHub\\Genesis\\frontend\\src\\web3Connection\\Web3ConnectionContext.tsx": {
+      "id": "(app-client)/./src/web3Connection/Web3ConnectionContext.tsx",
       "name": "*",
       "chunks": [
         "app/app/layout:static/chunks/app/app/layout.js"
@@ -275,27 +283,19 @@
       ],
       "async": false
     },
-    "C:\\Users\\aramb.ARAMBH\\OneDrive\\Documents\\GitHub\\Genesis\\frontend\\src\\components\\Sections\\Nav\\AppSidebar.tsx": {
-      "id": "(app-client)/./src/components/Sections/Nav/AppSidebar.tsx",
+    "C:\\Users\\aramb.ARAMBH\\OneDrive\\Documents\\GitHub\\Genesis\\frontend\\src\\components\\provider\\AnimationDivProvider.tsx": {
+      "id": "(app-client)/./src/components/provider/AnimationDivProvider.tsx",
       "name": "*",
       "chunks": [
         "app/app/layout:static/chunks/app/app/layout.js"
       ],
       "async": false
     },
-    "C:\\Users\\aramb.ARAMBH\\OneDrive\\Documents\\GitHub\\Genesis\\frontend\\src\\components\\Sections\\UploadData\\UploadData.tsx": {
-      "id": "(app-client)/./src/components/Sections/UploadData/UploadData.tsx",
+    "C:\\Users\\aramb.ARAMBH\\OneDrive\\Documents\\GitHub\\Genesis\\frontend\\src\\components\\Sections\\Nav\\AppSidebar.tsx": {
+      "id": "(app-client)/./src/components/Sections/Nav/AppSidebar.tsx",
       "name": "*",
       "chunks": [
-        "app/app/page:static/chunks/app/app/page.js"
-      ],
-      "async": false
-    },
-    "C:\\Users\\aramb.ARAMBH\\OneDrive\\Documents\\GitHub\\Genesis\\frontend\\src\\components\\Sections\\ShowData\\UserAllData.tsx": {
-      "id": "(app-client)/./src/components/Sections/ShowData/UserAllData.tsx",
-      "name": "*",
-      "chunks": [
-        "app/app/page:static/chunks/app/app/page.js"
+        "app/app/layout:static/chunks/app/app/layout.js"
       ],
       "async": false
     }
@@ -305,9 +305,9 @@
     "C:\\Users\\aramb.ARAMBH\\OneDrive\\Documents\\GitHub\\Genesis\\frontend\\src\\app\\layout": [
       "static/css/app/layout.css"
     ],
-    "C:\\Users\\aramb.ARAMBH\\OneDrive\\Documents\\GitHub\\Genesis\\frontend\\src\\app\\app\\layout": [],
-    "C:\\Users\\aramb.ARAMBH\\OneDrive\\Documents\\GitHub\\Genesis\\frontend\\src\\app\\app\\loading": [],
     "C:\\Users\\aramb.ARAMBH\\OneDrive\\Documents\\GitHub\\Genesis\\frontend\\src\\app\\loading": [],
-    "C:\\Users\\aramb.ARAMBH\\OneDrive\\Documents\\GitHub\\Genesis\\frontend\\src\\app\\app\\page": []
+    "C:\\Users\\aramb.ARAMBH\\OneDrive\\Documents\\GitHub\\Genesis\\frontend\\src\\app\\app\\page": [],
+    "C:\\Users\\aramb.ARAMBH\\OneDrive\\Documents\\GitHub\\Genesis\\frontend\\src\\app\\app\\layout": [],
+    "C:\\Users\\aramb.ARAMBH\\OneDrive\\Documents\\GitHub\\Genesis\\frontend\\src\\app\\app\\loading": []
   }
 }
