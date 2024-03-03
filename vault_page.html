@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vault Contents</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.7-rc.0/web3.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <h1>Vault Contents</h1>
+
+    <div id="vaultContents"></div>
+
+    <script>
+        const contractAddress = "0x5a5BaD7056eBE341a479FAE80a6f76B960CAD0BB";
+        const contractABI = [
+            {
+                "inputs": [
+                    {
+                        "internalType": "string",
+                        "name": "website",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "username",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "password",
+                        "type": "string"
+                    }
+                ],
+                "name": "addCredentials",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "index",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "deleteCredentials",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "string",
+                        "name": "masterPassword",
+                        "type": "string"
+                    }
+                ],
+                "name": "setEncryptionKey",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "index",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "newWebsite",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "newUsername",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "newPassword",
+                        "type": "string"
+                    }
+                ],
+                "name": "updateCredentials",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getEncryptionKey",
+                "outputs": [
+                    {
+                        "internalType": "bytes32",
+                        "name": "",
+                        "type": "bytes32"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getVault",
+                "outputs": [
+                    {
+                        "internalType": "uint256[]",
+                        "name": "",
+                        "type": "uint256[]"
+                    },
+                    {
+                        "internalType": "string[]",
+                        "name": "",
+                        "type": "string[]"
+                    },
+                    {
+                        "internalType": "string[]",
+                        "name": "",
+                        "type": "string[]"
+                    },
+                    {
+                        "internalType": "string[]",
+                        "name": "",
+                        "type": "string[]"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "string",
+                        "name": "masterPassword",
+                        "type": "string"
+                    }
+                ],
+                "name": "login",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ];
+
+        let web3;
+        let contractInstance;
+
+        async function init() {
+            if (window.ethereum) {
+                web3 = new Web3(window.ethereum);
+                try {
+                    await window.ethereum.enable();
+                    web3.eth.defaultAccount = (await web3.eth.getAccounts())[0];
+                } catch (error) {
+                    console.error("User denied account access");
+                }
+            } else if (window.web3) {
+                web3 = new Web3(web3.currentProvider);
+                web3.eth.defaultAccount = (await web3.eth.getAccounts())[0];
+            } else {
+                console.error("No Ethereum provider detected");
+                return;
+            }
+
+            contractInstance = new web3.eth.Contract(contractABI, contractAddress);
+        }
+
+        async function getVault() {
+            try {
+                const result = await contractInstance.methods.getVault().call({
+                    from: web3.eth.defaultAccount
+                });
+
+                const indices = result[0];
+                const websites = result[1];
+                const usernames = result[2];
+                const passwords = result[3];
+
+                // Ensure the element exists before manipulating its content
+                const vaultElement = document.getElementById("vaultContents");
+                if (!vaultElement) {
+                    console.error("Element with ID 'vaultContents' not found.");
+                    return;
+                }
+
+                vaultElement.innerHTML = "<h2>Vault Contents</h2>";
+
+                if (indices.length > 0) {
+                    for (let i = 0; i < indices.length; i++) {
+                        vaultElement.innerHTML += `
+                            <div>
+                                <strong>Index:</strong> ${indices[i]}<br>
+                                <strong>Website:</strong> ${websites[i]}<br>
+                                <strong>Username:</strong> ${usernames[i]}<br>
+                                <strong>Password:</strong> ${passwords[i]}<br>
+                                <button onclick="deleteCredentials(${indices[i]})">Delete Entry</button>
+                            </div>
+                            <hr>
+                        `;
+                    }
+                } else {
+                    vaultElement.innerHTML += "<p>No entries in the vault.</p>";
+                }
+            } catch (error) {
+                console.error("Error getting vault contents:", error);
+            }
+        }
+
+        async function deleteCredentials(index) {
+            try {
+                await contractInstance.methods.deleteCredentials(index).send({
+                    from: web3.eth.defaultAccount
+                });
+
+                // Refresh the vault contents after deletion
+                getVault();
+            } catch (error) {
+                console.error("Error deleting entry:", error);
+            }
+        }
+
+        window.onload = async () => {
+            await init();
+            getVault();
+        };
+    </script>
+</body>
+
+</html>

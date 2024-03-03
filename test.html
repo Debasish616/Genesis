@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Password Manager Frontend</title>
+	<link rel="stylesheet" href="style.css">
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.7-rc.0/web3.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+	<div class="container">
+		<video class="video-background" autoplay loop muted>
+			<source src="assets/sample.mp4" type="video/mp4">
+			Your browser does not support the video tag.
+		</video>
+	</div>
+	<div class="logo-container">
+		<img class="logo" src="assets/logo.svg" alt="">
+	</div>
+	<div class="text">
+		<span>WELCOME TO THE WORLD OF GENESIS</span>
+		<span>Secure Your Password & Vault</span>
+	</div>
+
+	<div class="section">
+		<!-- <label for="masterPassword">Master Password:</label> -->
+		<input type="password" id="masterPasswordInput" class="input-btn" placeholder="Enter master password">
+		<button class="button-59" role="button" onclick="setEncryptionKey()">Set Encryption Key</button>
+		<button class="button-59" role="button" onclick="getEncryptionKey()">Get Encryption Key</button>
+		<button class="button-59" role="button" onclick="login()">Login</button>
+		<span id="result"></span>
+	</div>
+	<!-- <div id="result"></div> -->
+
+	<script>
+		const contractAddress = "0x3Fa47A2dFC430eef29Cc3c0722fC8c09FBfa0a1B";
+		const contractABI = [
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "website",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "username",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "password",
+						"type": "string"
+					}
+				],
+				"name": "addCredentials",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "masterPassword",
+						"type": "string"
+					}
+				],
+				"name": "setEncryptionKey",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getEncryptionKey",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getVault",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "website",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "username",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "password",
+								"type": "string"
+							}
+						],
+						"internalType": "struct PasswordManager.Credentials[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "masterPassword",
+						"type": "string"
+					}
+				],
+				"name": "login",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		];
+
+		let web3;
+		let contractInstance;
+
+		async function init() {
+			if (window.ethereum) {
+				web3 = new Web3(window.ethereum);
+				try {
+					await window.ethereum.enable();
+
+					// Set default account
+					web3.eth.defaultAccount = (await web3.eth.getAccounts())[0];
+				} catch (error) {
+					console.error("User denied account access");
+				}
+			} else if (window.web3) {
+				web3 = new Web3(web3.currentProvider);
+
+				// Set default account
+				web3.eth.defaultAccount = (await web3.eth.getAccounts())[0];
+			} else {
+				console.error("No Ethereum provider detected");
+				return;
+			}
+
+			contractInstance = new web3.eth.Contract(contractABI, contractAddress);
+		}
+
+		async function setEncryptionKey() {
+			const masterPassword = document.getElementById("masterPasswordInput").value;
+
+			try {
+				const result = await contractInstance.methods.setEncryptionKey(masterPassword).send({
+					from: web3.eth.defaultAccount
+				});
+
+				document.getElementById("result").innerHTML = "Encryption Key Set Successfully!";
+				console.log(result);
+			} catch (error) {
+				console.error("Error setting encryption key:", error);
+			}
+		}
+
+		async function getEncryptionKey() {
+			try {
+				const result = await contractInstance.methods.getEncryptionKey().call({
+					from: web3.eth.defaultAccount
+				});
+
+				document.getElementById("result").innerHTML = `Encryption Key: ${result}`;
+				console.log(result);
+			} catch (error) {
+				console.error("Error getting encryption key:", error);
+			}
+		}
+
+		async function login() {
+			const masterPassword = document.getElementById("masterPasswordInput").value;
+
+			try {
+				const result = await contractInstance.methods.login(masterPassword).call({
+					from: web3.eth.defaultAccount
+				});
+
+				if (result) {
+					document.getElementById("result").innerHTML = "Login Successful!";
+					// Redirect to the next HTML page (replace 'next_page.html' with your actual HTML file)
+					window.location.href = "next_page.html";
+				} else {
+					document.getElementById("result").innerHTML = "Login Failed!";
+				}
+
+				console.log(result);
+			} catch (error) {
+				console.error("Error during login:", error);
+			}
+		}
+
+		window.onload = async () => {
+			await init();
+		};
+	</script>
+</body>
+
+</html>

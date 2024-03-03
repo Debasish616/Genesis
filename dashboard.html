@@ -1,0 +1,293 @@
+<!-- next_page.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Credentials</title>
+	<link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.7-rc.0/web3.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <video class="video-background" autoplay loop muted>
+            <source src="assets/sample.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <div class="logo-container">
+        <img class="logo" src="assets/logo.svg" alt="">
+    </div>
+    <div class="text2">
+		<h4>Enter Credentials</h4>
+    </div>
+    
+<div class="section">
+    <div>
+        <label for="website">Website:</label>
+        <input type="text" id="websiteInput" class="input-btn2" placeholder="Enter website">
+    </div>
+
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" id="usernameInput" class="input-btn2" placeholder="Enter username">
+    </div>
+
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="passwordInput" class="input-btn2" placeholder="Enter password">
+    </div>
+
+    <button class="button-59" onclick="addCredentials()">Submit Credentials</button>
+	<div id="result"></div>
+
+    <button id="getVaultButton" class="button-59" style="display:none;" onclick="redirectToVaultPage()">Get Vault</button>
+
+    <ul id="vaultList" style="display:none;"></ul>
+</div>
+
+    <script>
+        const contractAddress = "0x5a5BaD7056eBE341a479FAE80a6f76B960CAD0BB";
+        const contractABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "website",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "username",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "password",
+				"type": "string"
+			}
+		],
+		"name": "addCredentials",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "deleteCredentials",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "masterPassword",
+				"type": "string"
+			}
+		],
+		"name": "setEncryptionKey",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "newWebsite",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "newUsername",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "newPassword",
+				"type": "string"
+			}
+		],
+		"name": "updateCredentials",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getEncryptionKey",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getVault",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "string[]",
+				"name": "",
+				"type": "string[]"
+			},
+			{
+				"internalType": "string[]",
+				"name": "",
+				"type": "string[]"
+			},
+			{
+				"internalType": "string[]",
+				"name": "",
+				"type": "string[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "masterPassword",
+				"type": "string"
+			}
+		],
+		"name": "login",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+
+        let web3;
+        let contractInstance;
+
+        async function init() {
+            if (window.ethereum) {
+                web3 = new Web3(window.ethereum);
+                try {
+                    await window.ethereum.enable();
+                    web3.eth.defaultAccount = (await web3.eth.getAccounts())[0];
+                } catch (error) {
+                    console.error("User denied account access");
+                }
+            } else if (window.web3) {
+                web3 = new Web3(web3.currentProvider);
+                web3.eth.defaultAccount = (await web3.eth.getAccounts())[0];
+            } else {
+                console.error("No Ethereum provider detected");
+                return;
+            }
+
+            contractInstance = new web3.eth.Contract(contractABI, contractAddress);
+        }
+
+        async function addCredentials() {
+            const website = document.getElementById("websiteInput").value;
+            const username = document.getElementById("usernameInput").value;
+            const password = document.getElementById("passwordInput").value;
+
+            try {
+                await contractInstance.methods.addCredentials(website, username, password).send({
+                    from: web3.eth.defaultAccount
+                });
+
+                document.getElementById("result").innerHTML = "Credentials Submitted Successfully!";
+                document.getElementById("getVaultButton").style.display = "block";
+            } catch (error) {
+                console.error("Error submitting credentials:", error);
+            }
+        }
+
+        // async function getVault() {
+        //     try {
+        //         const result = await contractInstance.methods.getVault().call({
+        //             from: web3.eth.defaultAccount
+        //         });
+
+        //         const indices = result[0];
+        //         const websites = result[1];
+        //         const usernames = result[2];
+        //         const passwords = result[3];
+
+        //         const vaultElement = document.getElementById("result");
+        //         vaultElement.innerHTML = "<h2>Vault Contents</h2>";
+
+        //         if (indices.length > 0) {
+        //             for (let i = 0; i < indices.length; i++) {
+        //                 vaultElement.innerHTML += `
+        //                     <div>
+        //                         <strong>Index:</strong> ${indices[i]}<br>
+        //                         <strong>Website:</strong> ${websites[i]}<br>
+        //                         <strong>Username:</strong> ${usernames[i]}<br>
+        //                         <strong>Password:</strong> ${passwords[i]}<br>
+        //                         <button onclick="deleteCredentials(${indices[i]})">Delete Entry</button>
+        //                     </div>
+        //                     <hr>
+        //                 `;
+        //             }
+        //         } else {
+        //             vaultElement.innerHTML += "<p>No entries in the vault.</p>";
+        //         }
+        //     } catch (error) {
+        //         console.error("Error getting vault contents:", error);
+        //     }
+        // }
+
+        // async function deleteCredentials(index) {
+        //     try {
+        //         await contractInstance.methods.deleteCredentials(index).send({
+        //             from: web3.eth.defaultAccount
+        //         });
+
+        //         // Refresh the vault contents after deletion
+        //         getVault();
+        //     } catch (error) {
+        //         console.error("Error deleting entry:", error);
+        //     }
+        // }
+
+       
+		function redirectToVaultPage() {
+            // Redirect to the vault_page.html
+            window.location.href = "vault_page.html";
+        }
+		window.onload = async () => {
+            await init();
+        };
+    </script>
+</body>
+
+</html>
